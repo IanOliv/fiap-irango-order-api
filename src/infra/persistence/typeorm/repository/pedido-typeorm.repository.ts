@@ -20,9 +20,7 @@ export default class PedidoTypeormRepository implements IPedidoRepository {
     let { itens, ...model } = PedidoMapper.toDto(input)
     model = await this.repository.save(model)
 
-    itens.forEach((item) => {
-      item.pedidoId = model.id
-    })
+    itens.forEach((item) => (item.pedidoId = model.id))
 
     model = await this.repository.save({ ...model, itens })
 
@@ -73,13 +71,13 @@ export default class PedidoTypeormRepository implements IPedidoRepository {
           WHEN '${PedidoStatusEnum.RECEBIDO}' THEN 3
           WHEN '${PedidoStatusEnum.PAGAMENTO_PENDENTE}' THEN 4
           WHEN '${PedidoStatusEnum.FINALIZADO}' THEN 5
-          
+
           ELSE 99
         END
       )`, 'ASC')
       .addOrderBy('pedido.createdAt', 'DESC')
       .getMany()
 
-    return pedidos.map(PedidoMapper.toDomainEntity)
+    return pedidos.map(pedido => PedidoMapper.toDomainEntity(pedido))
   }
 }

@@ -39,9 +39,7 @@ export default class Cpf {
       return true
     }
 
-    if (cpf.length !== this.DIGIT_VERIFY) {
-      return false
-    }
+    if (cpf.length !== this.DIGIT_VERIFY) return false
 
     const numbersTheSame = cpf.split('').every((c) => c === cpf[0])
 
